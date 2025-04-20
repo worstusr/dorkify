@@ -1,36 +1,33 @@
-# dorkify
-Este buscador nasceu de uma ideia de análise visual: Combinar dorks com visualizações, como nuvem de palavras e distribuição de domínios, para gerar insights rápidos sobre a web — direto no seu navegador. Simples, rápido, escalável e sem dependência de APIs externas.
+# 🔍 dorkfy
 
- 🔍 Buscador Dorks Inteligente
+Um buscador visual e inteligente feito com Python + Streamlit. O `dorkfy` usa dorks do Google para realizar buscas específicas como `filetype:pdf`, `site:gov.br`, e muito mais — tudo sem depender de APIs, com visualização clara e interativa.
 
-Um buscador simples, direto e visual feito com Python + Streamlit. Ele utiliza dorks do Google para realizar buscas específicas como `filetype:pdf`, `site:gov.br` e muito mais — sem necessidade de API ou autenticação.
+---
 
-___
-
- 🚀 Funcionalidades
+## 🚀 Funcionalidades
 
 ✅ Interface interativa com Streamlit  
-✅ Busca com dorks personalizadas  
-✅ Filtros inteligentes e navegação por páginas  
-✅ Nuvem de palavras dos domínios mais frequentes  
-✅ Gráfico visual com distribuição dos resultados  
-✅ Tudo em um único arquivo (`app.py`)
+✅ Sugestões e uso de dorks inteligentes  
+✅ Nuvem de palavras com domínios mais frequentes  
+✅ Visualização dos domínios encontrados em gráfico  
+✅ Paginação dos resultados  
+✅ Código enxuto, em um único arquivo (`app.py`)
 
-___
+---
 
- 💡 Exemplo de uso
+## 💡 Exemplos de uso
 
 - Buscar arquivos PDF sobre "orçamento 2024"
-- Explorar resultados de sites específicos, como `site:unesp.br`
-- Identificar padrões e domínios mais presentes visualmente
+- Encontrar apresentações `.pptx` sobre tecnologia
+- Navegar por resultados de domínios específicos, como `site:unesp.br`
 
-___
+---
 
- ⚙️ Como rodar
+## ⚙️ Como rodar
 
-bash
-git clone https://github.com/seu-usuario/buscador-dorks-inteligente.git
-cd buscador-dorks-inteligente
+```bash
+git clone https://github.com/seu-usuario/dorkfy.git
+cd dorkfy
 
 pip install -r requirements.txt
 
