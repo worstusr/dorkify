@@ -1,0 +1,5 @@
+streamlit
+googlesearch-python
+wordcloud
+matplotlib
+pandas
