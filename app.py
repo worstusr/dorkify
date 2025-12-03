@@ -8,6 +8,7 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import time
 from search_helper import google_search_improved
+from filter_engine import filter_search_results
 
 # Configuração da página
 st.set_page_config(
@@ -198,8 +199,19 @@ def google_search_safe(query, num_results=50):
         st.error(f"Erro na busca: {str(e)[:100]}")
         return []
 
-# Seção de busca
-st.markdown('<div class="search-container">', unsafe_allow_html=True)
+# Seção de busca com CSS
+st.markdown("""
+<style>
+[data-testid="column"] {
+    background: linear-gradient(135deg, #1A2332 0%, #1F2937 100%);
+    padding: 2em;
+    border-radius: 15px;
+    border: 2px solid rgba(46, 125, 50, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(46, 125, 50, 0.1);
+    margin-bottom: 2em;
+}
+</style>
+""", unsafe_allow_html=True)
 
 col1, col2 = st.columns([1, 2])
 
@@ -216,8 +228,6 @@ with col2:
         placeholder="Ex: O Cortiço - Aluísio Azevedo",
         help="Digite o nome do livro ou autor"
     )
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 # Montar a query
 query = ""
@@ -243,15 +253,19 @@ if query:
         try:
             with st.spinner("⏳ Buscando livros... isso pode levar um pouco..."):
                 resultados = google_search_safe(query, num_results=50)
-            links_filtrados = [url for url in resultados if is_valid_link(url)]
+            
+            # Aplicar engine de filtragem inteligente
+            links_filtrados, stats = filter_search_results(resultados, min_score=0.3)
+            
             st.session_state.todos_links = links_filtrados
             st.session_state.ultima_query = query
             st.session_state.pagina = 0
+            st.session_state.filter_stats = stats
             
             if links_filtrados:
-                st.success(f"✅ {len(links_filtrados)} resultados encontrados!")
+                st.success(f"✅ {len(links_filtrados)} resultados encontrados! (Bloqueados: {stats['blocked']} spam)")
             else:
-                st.warning("⚠️ Nenhum resultado encontrado. Tente outra busca.")
+                st.warning("⚠️ Nenhum resultado encontrado após filtros inteligentes. Tente outra busca.")
         except Exception as e:
             st.error(f"❌ Erro ao buscar: {e}")
 
@@ -262,6 +276,12 @@ if query:
         links_pagina = st.session_state.todos_links[inicio:fim]
 
         st.markdown('<div class="results-container">', unsafe_allow_html=True)
+        
+        # Mostrar estatísticas de filtragem
+        if 'filter_stats' in st.session_state:
+            stats = st.session_state.filter_stats
+            st.markdown(f"<div class='info-box'>🔍 <strong>Filtragem Inteligente:</strong> {stats['processed']} processados, {stats['blocked']} spam removido, {stats['filtered']} livros relevantes</div>", unsafe_allow_html=True)
+        
         st.markdown(f"### 📖 Resultados da busca (página {st.session_state.pagina + 1} de {(total-1)//RESULTADOS_POR_PAGINA + 1})")
         
         for idx, url in enumerate(links_pagina, 1):
